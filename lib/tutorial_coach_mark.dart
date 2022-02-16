@@ -3,6 +3,7 @@ library tutorial_coach_mark;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:tutorial_coach_mark/src/target/target_focus.dart';
 import 'package:tutorial_coach_mark/src/widgets/tutorial_coach_mark_widget.dart';
 
@@ -83,6 +84,7 @@ class TutorialCoachMark {
       if (_overlayEntry == null) {
         _overlayEntry = _buildOverlay();
         Overlay.of(_context, rootOverlay: rootOverlay)?.insert(_overlayEntry!);
+        BackButtonInterceptor.add(_backButtonInterceptor);
       }
     });
   }
@@ -90,6 +92,7 @@ class TutorialCoachMark {
   void finish() {
     onFinish?.call();
     _removeOverlay();
+    BackButtonInterceptor.remove(_backButtonInterceptor);
   }
 
   void skip() {
@@ -106,5 +109,10 @@ class TutorialCoachMark {
   void _removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
+  }
+
+  bool _backButtonInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    finish();
+    return true;
   }
 }
