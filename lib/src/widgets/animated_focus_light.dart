@@ -171,10 +171,13 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
 class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
   @override
   Widget build(BuildContext context) {
+    final onTapOrLongPressed = _targetFocus.enableOverlayTab
+        ? () => _tapHandler(overlayTap: true)
+        : null;
+
     return InkWell(
-      onTap: _targetFocus.enableOverlayTab
-          ? () => _tapHandler(overlayTap: true)
-          : null,
+      onLongPress: onTapOrLongPressed,
+      onTap: onTapOrLongPressed,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (_, child) {
@@ -307,10 +310,13 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
 
   @override
   Widget build(BuildContext context) {
+    final onTapOrLongPressed = _targetFocus.enableOverlayTab
+        ? () => _tapHandler(overlayTap: true)
+        : null;
+
     return InkWell(
-      onTap: _targetFocus.enableOverlayTab
-          ? () => _tapHandler(overlayTap: true)
-          : null,
+      onLongPress: onTapOrLongPressed,
+      onTap: onTapOrLongPressed,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (_, child) {
