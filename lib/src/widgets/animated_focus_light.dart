@@ -205,6 +205,7 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
                     (_targetPosition?.offset.dx ?? 0) - _getPaddingFocus() * 2,
                 top: (_targetPosition?.offset.dy ?? 0) - _getPaddingFocus() * 2,
                 child: InkWell(
+                  key: const ValueKey('tutorialTargetInkWell'),
                   borderRadius: _betBorderRadiusTarget(),
                   onTap: _targetFocus.enableTargetTab
                       ? () => _tapHandler(targetTap: true, isLongPressed: false)
@@ -356,6 +357,7 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
                     top: (_targetPosition?.offset.dy ?? 0) -
                         _getPaddingFocus() * 2,
                     child: InkWell(
+                      key: const ValueKey('tutorialTargetInkWell'),
                       borderRadius: _betBorderRadiusTarget(),
                       onTap: _targetFocus.enableTargetTab
                           ? () => _tapHandler(
