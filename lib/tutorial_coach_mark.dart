@@ -17,6 +17,8 @@ class TutorialCoachMark {
   final List<TargetFocus> targets;
   final FutureOr<void> Function(TargetFocus)? onClickTarget;
   final FutureOr<void> Function(TargetFocus)? onClickOverlay;
+  final FutureOr<void> Function(TargetFocus)? onLongPressedTarget;
+  final FutureOr<void> Function(TargetFocus)? onLongPressedOverlay;
   final Function()? onFinish;
   final double paddingFocus;
   final Function()? onSkip;
@@ -39,6 +41,8 @@ class TutorialCoachMark {
       this.colorShadow = Colors.black,
       this.onClickTarget,
       this.onClickOverlay,
+      this.onLongPressedTarget,
+      this.onLongPressedOverlay,
       this.onFinish,
       this.paddingFocus = 10,
       this.onSkip,
@@ -61,6 +65,8 @@ class TutorialCoachMark {
           targets: targets,
           clickTarget: onClickTarget,
           clickOverlay: onClickOverlay,
+          onLongPressedTarget: onLongPressedTarget,
+          onLongPressedOverlay: onLongPressedOverlay,
           paddingFocus: paddingFocus,
           onClickSkip: skip,
           alignSkip: alignSkip,
