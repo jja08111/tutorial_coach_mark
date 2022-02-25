@@ -14,6 +14,8 @@ class TutorialCoachMarkWidget extends StatefulWidget {
     this.paddingFocus = 10,
     this.clickTarget,
     this.clickOverlay,
+    this.onLongPressedTarget,
+    this.onLongPressedOverlay,
     this.alignSkip = Alignment.bottomRight,
     this.textSkip = "SKIP",
     this.onClickSkip,
@@ -32,6 +34,8 @@ class TutorialCoachMarkWidget extends StatefulWidget {
   final List<TargetFocus> targets;
   final FutureOr Function(TargetFocus)? clickTarget;
   final FutureOr Function(TargetFocus)? clickOverlay;
+  final FutureOr Function(TargetFocus)? onLongPressedTarget;
+  final FutureOr Function(TargetFocus)? onLongPressedOverlay;
   final Function()? finish;
   final Color colorShadow;
   final double opacityShadow;
@@ -80,6 +84,8 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
             clickOverlay: (target) {
               return widget.clickOverlay?.call(target);
             },
+            onLongPressedTarget: widget.onLongPressedTarget,
+            onLongPressedOverlay: widget.onLongPressedOverlay,
             focus: (target) {
               setState(() {
                 currentTarget = target;

@@ -13,6 +13,8 @@ class AnimatedFocusLight extends StatefulWidget {
   final Function(TargetFocus)? focus;
   final FutureOr Function(TargetFocus)? clickTarget;
   final FutureOr Function(TargetFocus)? clickOverlay;
+  final FutureOr Function(TargetFocus)? onLongPressedTarget;
+  final FutureOr Function(TargetFocus)? onLongPressedOverlay;
   final Function? removeFocus;
   final Function()? finish;
   final double paddingFocus;
@@ -31,6 +33,8 @@ class AnimatedFocusLight extends StatefulWidget {
     this.removeFocus,
     this.clickTarget,
     this.clickOverlay,
+    this.onLongPressedTarget,
+    this.onLongPressedOverlay,
     this.paddingFocus = 10,
     this.colorShadow = Colors.black,
     this.opacityShadow = 0.8,
@@ -96,12 +100,17 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
     bool goNext = true,
     bool targetTap = false,
     bool overlayTap = false,
+    bool isLongPressed = false,
   }) async {
     if (targetTap) {
-      await widget.clickTarget?.call(_targetFocus);
+      await (isLongPressed
+          ? widget.onLongPressedTarget?.call(_targetFocus)
+          : widget.clickTarget?.call(_targetFocus));
     }
     if (overlayTap) {
-      await widget.clickOverlay?.call(_targetFocus);
+      await (isLongPressed
+          ? widget.onLongPressedOverlay?.call(_targetFocus)
+          : widget.clickOverlay?.call(_targetFocus));
     }
   }
 
@@ -171,13 +180,13 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
 class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
   @override
   Widget build(BuildContext context) {
-    final onTapOrLongPressed = _targetFocus.enableOverlayTab
-        ? () => _tapHandler(overlayTap: true)
-        : null;
-
     return InkWell(
-      onLongPress: onTapOrLongPressed,
-      onTap: onTapOrLongPressed,
+      onLongPress: _targetFocus.enableOverlayTab
+          ? () => _tapHandler(overlayTap: true, isLongPressed: true)
+          : null,
+      onTap: _targetFocus.enableOverlayTab
+          ? () => _tapHandler(overlayTap: true, isLongPressed: false)
+          : null,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (_, child) {
@@ -198,7 +207,10 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
                 child: InkWell(
                   borderRadius: _betBorderRadiusTarget(),
                   onTap: _targetFocus.enableTargetTab
-                      ? () => _tapHandler(targetTap: true)
+                      ? () => _tapHandler(targetTap: true, isLongPressed: false)
+                      : null,
+                  onLongPress: _targetFocus.enableTargetTab
+                      ? () => _tapHandler(targetTap: true, isLongPressed: true)
                       : null,
                   child: Container(
                     color: Colors.transparent,
@@ -221,11 +233,13 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
     bool goNext = true,
     bool targetTap = false,
     bool overlayTap = false,
+    bool isLongPressed = false,
   }) async {
     await super._tapHandler(
       goNext: goNext,
       targetTap: targetTap,
       overlayTap: overlayTap,
+      isLongPressed: isLongPressed,
     );
     setState(() => _goNext = goNext);
     _controller.reverse();
@@ -310,13 +324,13 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
 
   @override
   Widget build(BuildContext context) {
-    final onTapOrLongPressed = _targetFocus.enableOverlayTab
-        ? () => _tapHandler(overlayTap: true)
-        : null;
-
     return InkWell(
-      onLongPress: onTapOrLongPressed,
-      onTap: onTapOrLongPressed,
+      onLongPress: _targetFocus.enableOverlayTab
+          ? () => _tapHandler(overlayTap: true, isLongPressed: true)
+          : null,
+      onTap: _targetFocus.enableOverlayTab
+          ? () => _tapHandler(overlayTap: true, isLongPressed: false)
+          : null,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (_, child) {
@@ -344,7 +358,16 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
                     child: InkWell(
                       borderRadius: _betBorderRadiusTarget(),
                       onTap: _targetFocus.enableTargetTab
-                          ? () => _tapHandler(targetTap: true)
+                          ? () => _tapHandler(
+                                targetTap: true,
+                                isLongPressed: false,
+                              )
+                          : null,
+                      onLongPress: _targetFocus.enableTargetTab
+                          ? () => _tapHandler(
+                                targetTap: true,
+                                isLongPressed: true,
+                              )
                           : null,
                       child: Container(
                         color: Colors.transparent,
@@ -408,11 +431,13 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
     bool goNext = true,
     bool targetTap = false,
     bool overlayTap = false,
+    bool isLongPressed = false,
   }) async {
     await super._tapHandler(
       goNext: goNext,
       targetTap: targetTap,
       overlayTap: overlayTap,
+      isLongPressed: isLongPressed,
     );
     setState(() {
       _goNext = goNext;
